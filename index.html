@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BMI ক্যালকুলেটর (feet + inch)</title>
+<style>
+:root {
+    --green: #27ae60;
+    --blue: #2980b9;
+    --orange: #e67e22;
+    --red: #c0392b;
+    --glass: rgba(255,255,255,0.3);
+    --border: rgba(255,255,255,0.5);
+    --text-dark: #222;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    min-height: 100vh;
+  
+   
+
+/*background */
+    
+background: #c7cba4; 
+
+
+
+
+
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+}
+.container {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    padding: 30px 35px 40px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+h1 {
+    background: linear-gradient(45deg, var(--blue), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+}
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 16px;
+    color: var(--text-dark);
+}
+input[type=number], select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    background: rgba(255,255,255,0.6);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-weight: 500;
+}
+input[type=number]:focus, select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 8px var(--blue);
+}
+.height-inputs {
+    display: flex;
+    gap: 15px;
+}
+.height-inputs > div {
+    flex: 1;
+}
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+button {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+button.calculate {
+    background: var(--green);
+    color: white;
+}
+button.calculate:hover {
+    background: var(--blue);
+    transform: scale(1.02);
+}
+button.secondary {
+    background: rgba(255,255,255,0.6);
+    color: var(--text-dark);
+}
+button.secondary:hover {
+    background: rgba(255,255,255,0.8);
+}
+.progress-container {
+    background: rgba(255,255,255,0.4);
+    height: 24px;
+    border-radius: 15px;
+    margin-top: 30px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background: var(--green);
+    transition: width 1s ease, background 1s ease;
+    border-radius: 15px 0 0 15px;
+}
+.bmi-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.result-container {
+    margin-top: 25px;
+    text-align: left;
+}
+.result-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+.ideal-weight {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+}
+.tip {
+    margin-top: 12px;
+    font-size: 15px;
+    color: #333;
+    font-weight: 600;
+    padding: 15px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 12px;
+}
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.action-buttons button {
+    padding: 10px;
+    font-size: 14px;
+}
+.hidden {
+    display: none;
+}
+@media (max-width:450px) {
+    .height-inputs {
+        flex-direction: column;
+    }
+    .height-inputs > div {
+        width: 100%;
+    }
+    .button-group, .action-buttons {
+        flex-direction: column;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-dark: #f0f0f0;
+    }
+    body {
+        background: linear-gradient(135deg, #1a3a4e, #1a472a);
+    }
+    input[type=number], select {
+        background: rgba(0,0,0,0.2);
+        color: white;
+        border-color: #444;
+    }
+    .tip {
+        background: rgba(0,0,0,0.2);
+        color: #eee;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container" role="main" aria-label="BMI ক্যালকুলেটর">
+    <h1>BMI ক্যালকুলেটর</h1>
+    
+    <div class="form-group">
+        <label for="gender">লিঙ্গ</label>
+        <select id="gender">
+            <option value="male">পুরুষ</option>
+            <option value="female">মহিলা</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="age">বয়স (বছর)</label>
+        <input type="number" id="age" placeholder="বছর" min="2" max="120" step="1" />
+    </div>
+    
+    <div class="form-group height-inputs">
+        <div>
+            <label for="heightFeet">উচ্চতা (ফুট)</label>
+            <input type="number" id="heightFeet" placeholder="ফুট (feet)" min="0" step="1" />
+        </div>
+        <div>
+            <label for="heightInch">উচ্চতা (ইঞ্চি)</label>
+            <input type="number" id="heightInch" placeholder="ইঞ্চি (inch)" min="0" max="11" step="1" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="weight">ওজন (<span id="weightUnit">কেজি</span>)</label>
+        <input type="number" id="weight" placeholder="কেজি (kg)" min="0" step="0.1" />
+    </div>
+    
+    <div class="button-group">
+        <button class="calculate" onclick="calculateBMI()">হিসাব করুন</button>
+        <button class="secondary" onclick="toggleUnit()">ইউনিট পরিবর্তন</button>
+    </div>
+    
+    <div class="progress-container" aria-label="BMI প্রগ্রেস বার">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="bmi-scale">
+        <span style="color:#2980b9">Underweight (<18.5)</span>
+        <span style="color:#27ae60">Normal (18.5-24.9)</span>
+        <span style="color:#e67e22">Overweight (25-29.9)</span>
+        <span style="color:#c0392b">Obese (30+)</span>
+    </div>
+    
+    <div class="result-container hidden" id="resultContainer">
+        <div class="result-text" id="result"></div>
+        <div class="ideal-weight" id="idealWeight"></div>
+        <div class="tip" id="tip"></div>
+        
+        <div class="action-buttons">
+            <button class="secondary" onclick="saveResult()">সেভ করুন</button>
+            <button class="secondary" onclick="shareBMI()">শেয়ার করুন</button>
+            <button class="secondary" onclick="window.print()">প্রিন্ট করুন</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const heightFeetInput = document.getElementById("heightFeet");
+const heightInchInput = document.getElementById("heightInch");
+const weightInput = document.getElementById("weight");
+const ageInput = document.getElementById("age");
+const genderInput = document.getElementById("gender");
+const resultContainer = document.getElementById("resultContainer");
+const weightUnitSpan = document.getElementById("weightUnit");
+let currentUnit = 'metric'; // 'metric' or 'imperial'
+
+function toggleUnit() {
+    if (currentUnit === 'metric') {
+        // Change to imperial
+        weightUnitSpan.textContent = "পাউন্ড";
+        weightInput.placeholder = "পাউন্ড (lb)";
+        currentUnit = 'imperial';
+    } else {
+        // Change back to metric
+        weightUnitSpan.textContent = "কেজি";
+        weightInput.placeholder = "কেজি (kg)";
+        currentUnit = 'metric';
+    }
+}
+
+function calculateBMI(){
+    const feetRaw = heightFeetInput.value.trim();
+    const inchRaw = heightInchInput.value.trim();
+    const wRaw = weightInput.value.trim();
+    const age = parseInt(ageInput.value) || 0;
+    const gender = genderInput.value;
+
+    const feet = parseInt(feetRaw) || 0;
+    const inch = parseInt(inchRaw) || 0;
+    let w = parseFloat(wRaw);
+
+    // Handle imperial units
+    if (currentUnit === 'imperial') {
+        w = w / 2.20462; // Convert pounds to kg
+    }
+
+    if(isNaN(w) || w <= 0){
+        showResult("সঠিক ওজন লিখুন");
+        return;
+    }
+    if(feet === 0 && inch === 0){
+        showResult("উচ্চতা লিখুন");
+        return;
+    }
+    if(inch < 0 || inch > 11){
+        showResult("ইঞ্চি অবশ্যই ০ থেকে ১১ এর মধ্যে হতে হবে");
+        return;
+    }
+    if(age < 2 || age > 120){
+        showResult("সঠিক বয়স লিখুন (২-১২০)");
+        return;
+    }
+
+    // ফুট + ইঞ্চি কে মিটারে রূপান্তর
+    const totalInches = (feet * 12) + inch;
+    const heightMeters = totalInches * 0.0254;
+
+    if(heightMeters <= 0){
+        showResult("সঠিক উচ্চতা লিখুন");
+        return;
+    }
+
+    let bmi = w / (heightMeters * heightMeters);
+    bmi = Number(bmi.toFixed(1));
+
+    // Adjust BMI for age and gender (simple adjustment)
+    if (age < 18) {
+        // Children and teens have different BMI interpretation
+        // This is a simplified version - real calculation would use percentiles
+        bmi = bmi * 0.95;
+    } else if (age > 65) {
+        // Elderly may have slightly higher normal range
+        bmi = bmi * 1.05;
+    }
+
+    updateUI(bmi, heightMeters, age, gender);
+}
+
+function calculateIdealWeight(heightMeters) {
+    const lower = 18.5 * heightMeters * heightMeters;
+    const upper = 24.9 * heightMeters * heightMeters;
+    return {
+        kg: {
+            lower: lower.toFixed(1),
+            upper: upper.toFixed(1)
+        },
+        pounds: {
+            lower: (lower * 2.20462).toFixed(1),
+            upper: (upper * 2.20462).toFixed(1)
+        }
+    };
+}
+
+function showResult(msg){
+    document.getElementById("result").textContent = msg;
+    document.getElementById("tip").textContent = "";
+    document.getElementById("idealWeight").textContent = "";
+    document.getElementById("progressBar").style.width = "0%";
+    resultContainer.classList.add("hidden");
+}
+
+function updateUI(bmi, heightMeters, age, gender){
+    let color = "#27ae60";
+    let category = "স্বাভাবিক";
+    let tip = "আপনার ওজন স্বাভাবিক। স্বাস্থ্যকর জীবন চালিয়ে যান।";
+
+    if(age < 18){
+        // Different ranges for children (simplified)
+        if(bmi < 15) {
+            color = "#2980b9";
+            category = "অতিরিক্ত কম ওজন";
+            tip = "শিশুর ওজন খুব কম। পুষ্টিকর খাদ্য এবং ডাক্তারের পরামর্শ প্রয়োজন।";
+        } else if(bmi < 18) {
+            color = "#2980b9";
+            category = "কম ওজন";
+            tip = "শিশুর ওজন কিছুটা কম। পুষ্টিকর খাদ্য গ্রহণ করুন।";
+        } else if(bmi < 25) {
+            color = "#27ae60";
+            category = "স্বাভাবিক";
+            tip = "শিশুর ওজন স্বাভাবিক। ভালো খাদ্যাভ্যাস বজায় রাখুন।";
+        } else if(bmi < 30) {
+            color = "#e67e22";
+            category = "বেশি ওজন";
+            tip = "শিশুর ওজন বেশি। স্বাস্থ্যকর খাদ্য এবং শারীরিক ক্রিয়াকলাপ বাড়ান।";
+        } else {
+            color = "#c0392b";
+            category = "অতিরিক্ত ওজন";
+            tip = "শিশুর ওজন অনেক বেশি। ডাক্তারের পরামর্শ নিন।";
+        }
+    } else {
+        // Standard ranges for adults
+        if(bmi < 18.5){
+            color = "#2980b9";
+            category = "কম ওজন";
+            tip = "আপনি Underweight। পুষ্টিকর খাদ্য খান এবং ডাক্তারের সাথে পরামর্শ করুন।";
+        } else if(bmi < 25){
+            color = "#27ae60";
+            category = "স্বাভাবিক";
+            tip = "আপনার ওজন স্বাভাবিক। স্বাস্থ্যকর জীবন চালিয়ে যান।";
+        } else if(bmi < 30){
+            color = "#e67e22";
+            category = "বেশি ওজন";
+            tip = "আপনি Overweight। নিয়মিত ব্যায়াম করুন এবং খাদ্যাভ্যাস পরিবর্তন করুন।";
+        } else {
+            color = "#c0392b";
+            category = "অতিরিক্ত ওজন";
+            tip = "আপনি Obese। ডাক্তারের পরামর্শ নিন এবং জীবনযাত্রায় পরিবর্তন আনুন।";
+        }
+    }
+
+    const maxBMI = 40;
+    const widthPercent = Math.min(bmi, maxBMI) / maxBMI * 100;
+    const progressBar = document.getElementById("progressBar");
+
+    progressBar.style.width = widthPercent + "%";
+    progressBar.style.background = color;
+
+    const idealWeight = calculateIdealWeight(heightMeters);
+    
+    document.getElementById("result").textContent = `আপনার BMI: ${bmi} (${category})`;
+    document.getElementById("idealWeight").textContent = 
+        `আদর্শ ওজন: ${idealWeight.kg.lower}kg - ${idealWeight.kg.upper}kg | ${idealWeight.pounds.lower}lb - ${idealWeight.pounds.upper}lb`;
+    document.getElementById("tip").textContent = tip;
+    
+    resultContainer.classList.remove("hidden");
+    
+    // Save to localStorage
+    localStorage.setItem('lastBMI', bmi);
+}
+
+function saveResult() {
+    const result = document.getElementById("result").textContent;
+    const tip = document.getElementById("tip").textContent;
+    const history = JSON.parse(localStorage.getItem('bmiHistory') || '[]');
+    
+    history.push({
+        date: new Date().toLocaleDateString(),
+        result: result,
+        tip: tip
+    });
+    
+    localStorage.setItem('bmiHistory', JSON.stringify(history));
+    alert("রেজাল্ট সেভ করা হয়েছে!");
+}
+
+function shareBMI() {
+    const result = document.getElementById("result").textContent;
+    const tip = document.getElementById("tip").textContent;
+    const shareText = `${result}\n${tip}\n\nBMI ক্যালকুলেটর ব্যবহার করে দেখুন👇`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'আমার BMI রেজাল্ট',
+            text: shareText,
+        }).catch(err => {
+            console.log('Error sharing:', err);
+            copyToClipboard(shareText);
+        });
+    } else {
+        copyToClipboard(shareText);
+    }
+}
+
+function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert("রেজাল্ট কপি করা হয়েছে!\n\n" + text);
+}
+
+// Clear previous result on input change
+[heightFeetInput, heightInchInput, weightInput, ageInput].forEach(input => {
+    input.addEventListener('input', () => {
+        showResult('');
+    });
+});
+
+// Load last result if available
+window.addEventListener('DOMContentLoaded', () => {
+    const lastBMI = localStorage.getItem('lastBMI');
+    if (lastBMI) {
+        // You might want to implement a proper history feature
+    }
+});
+</script>
+</body>
+</html>
