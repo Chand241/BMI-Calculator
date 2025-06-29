@@ -461,7 +461,8 @@ function saveResult() {
 function shareBMI() {
     const result = document.getElementById("result").textContent;
     const tip = document.getElementById("tip").textContent;
-    const shareText = `${result}\n${tip}\n\nBMI ক্যালকুলেটর ব্যবহার করে দেখুন👇`;
+    const shareText = `${result}\n${tip}\n\nBMI ক্যালকুলেটর ব্যবহার করে দেখুন👇
+    https://chand241.github.io/BMI-Calculator/`;
     
     if (navigator.share) {
         navigator.share({
